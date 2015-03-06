@@ -15,7 +15,21 @@ var webServer = http.createServer(httpApp).listen(8066);
 // Start Socket.io so it attaches itself to Express server
 var socketServer = io.listen(webServer, {"log level":1});
 
-easyrtc.on("getIceConfig", function(connectionObj, callback) {
+easyrtc.setOption('appIceServers', [
+	{url: "stun:test1.dehuinet.com"},
+	{
+	    "url":"turn:test1.dehuinet.com:3478?transport=udp",
+	    "username":"user1",
+	    "credential":"easy123"
+	  },
+	  {
+	    "url":"turn:test1.dehuinet.com:3478?transport=tcp",
+	    "username":"user1",
+	    "credential":"easy123"
+	  }
+]);
+
+/*easyrtc.on("getIceConfig", function(connectionObj, callback) {
     // This object will take in an array of XirSys STUN and TURN servers
     var iceConfig = [];
 
@@ -40,7 +54,7 @@ easyrtc.on("getIceConfig", function(connectionObj, callback) {
        		console.info('请求turn数据失败', body);
         }
     });
-});
+});*/
 
 // Start EasyRTC server
 var rtc = easyrtc.listen(httpApp, socketServer);
